@@ -26,7 +26,7 @@ cheap:
   route: "Cruz del Eje-Antalya"
 */
 
-const Create = () => {
+const Create = ({ history }) => {
   const [departureTime, handleChangeDepartureTime] = useState(new Date())
   const [arrivalTime, handleChangeArrivalTime] = useState(new Date())
 
@@ -34,11 +34,15 @@ const Create = () => {
     flightType: ''
   })
 
-  function handleChange(event) {
+  const handleChange = event => {
     setValues(oldValues => ({
       ...oldValues,
       [event.target.name]: event.target.value
     }))
+  }
+
+  const redirectToList = () => {
+    history.push('/')
   }
 
   return (
@@ -118,9 +122,23 @@ const Create = () => {
           </FormControl>
         </Box>
 
-        <Button type="submit" fullWidth variant="contained" color="primary">
-          Save
-        </Button>
+        <Box mt={3} mb={3}>
+          <Button
+            type="button"
+            fullWidth
+            variant="outlined"
+            color="primary"
+            onClick={redirectToList}
+          >
+            Back
+          </Button>
+        </Box>
+
+        <Box mt={3} mb={3}>
+          <Button type="submit" fullWidth variant="contained" color="primary">
+            Save
+          </Button>
+        </Box>
       </form>
     </div>
   )

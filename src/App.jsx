@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
-import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 import List from './components/List'
 import Create from './components/Create'
@@ -42,15 +45,11 @@ class App extends Component {
     return (
       <Router>
         <Container component="main" maxWidth="md">
-          {/* <Fab color="primary" aria-label="Add">
-            <AddIcon />
-          </Fab> */}
-
-          {/* <List /> */}
-          <Create />
-
-          {/* <p>{this.state.cheapJson}</p>
-          <p>{this.state.businessJson}</p> */}
+          <Switch>
+            <Route exact path="/" component={List} />
+            <Route path="/create" component={Create} />
+            <Redirect to="/" />
+          </Switch>
         </Container>
       </Router>
     )
