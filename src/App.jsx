@@ -4,6 +4,7 @@ import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import Container from '@material-ui/core/Container'
 import List from './components/List'
+import Create from './components/Create'
 
 class App extends Component {
   state = {
@@ -41,14 +42,15 @@ class App extends Component {
     return (
       <Router>
         <Container component="main" maxWidth="md">
-          <Fab color="primary" aria-label="Add">
+          {/* <Fab color="primary" aria-label="Add">
             <AddIcon />
-          </Fab>
+          </Fab> */}
 
-          <List />
+          {/* <List /> */}
+          <Create />
 
-          <p>{this.state.cheapJson}</p>
-          <p>{this.state.businessJson}</p>
+          {/* <p>{this.state.cheapJson}</p>
+          <p>{this.state.businessJson}</p> */}
         </Container>
       </Router>
     )

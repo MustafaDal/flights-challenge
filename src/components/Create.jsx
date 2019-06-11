@@ -1,121 +1,129 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import React, { useState } from 'react'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import Select from '@material-ui/core/Select'
+import Typography from '@material-ui/core/Typography'
+import AppBar from '@material-ui/core/AppBar'
+import Box from '@material-ui/core/Box'
+import Toolbar from '@material-ui/core/Toolbar'
+import DateFnsUtils from '@date-io/date-fns' // choose your lib
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import FilledInput from '@material-ui/core/FilledInput'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormControl from '@material-ui/core/FormControl'
 
-function MadeWithLove() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Built with love by the '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Material-UI
-      </Link>
-      {' team.'}
-    </Typography>
-  );
-}
+/*
+business
+  arrival: "Antalya"
+  arrivalTime: 1564410656
+  departure: "Ankara"
+  departureTime: 1561627856
 
-const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+cheap:
+  arrival: 1558902656
+  departure: 1558902656
+  route: "Cruz del Eje-Antalya"
+*/
 
-export default function SignIn() {
-  const classes = useStyles();
+const Create = () => {
+  const [departureTime, handleChangeDepartureTime] = useState(new Date())
+  const [arrivalTime, handleChangeArrivalTime] = useState(new Date())
+
+  const [values, setValues] = React.useState({
+    flightType: ''
+  })
+
+  function handleChange(event) {
+    setValues(oldValues => ({
+      ...oldValues,
+      [event.target.name]: event.target.value
+    }))
+  }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={5}>
-        <MadeWithLove />
-      </Box>
-    </Container>
-  );
+    <div>
+      <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Create A New Flight
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      <form>
+        <TextField
+          variant="filled"
+          margin="normal"
+          required
+          fullWidth
+          id="departure"
+          label="departure"
+          name="departure"
+          autoComplete="departure"
+          autoFocus
+        />
+
+        <TextField
+          variant="filled"
+          margin="normal"
+          required
+          fullWidth
+          id="arrival"
+          label="arrival"
+          name="arrival"
+          autoComplete="arrival"
+        />
+
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Box mt={2} mb={3}>
+            <DateTimePicker
+              label="departureTime"
+              value={departureTime}
+              onChange={handleChangeDepartureTime}
+              inputVariant="filled"
+              required
+              fullWidth
+            />
+          </Box>
+        </MuiPickersUtilsProvider>
+
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Box mt={3} mb={3}>
+            <DateTimePicker
+              label="arrivalTime"
+              value={arrivalTime}
+              onChange={handleChangeArrivalTime}
+              inputVariant="filled"
+              required
+              fullWidth
+            />
+          </Box>
+        </MuiPickersUtilsProvider>
+
+        <Box mt={3} mb={3}>
+          <FormControl variant="filled" required fullWidth>
+            <InputLabel htmlFor="flightType">Type</InputLabel>
+            <Select
+              value={values.flightType}
+              onChange={handleChange}
+              input={<FilledInput name="flightType" id="flightType" />}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="cheap">cheap</MenuItem>
+              <MenuItem value="business">business</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Button type="submit" fullWidth variant="contained" color="primary">
+          Save
+        </Button>
+      </form>
+    </div>
+  )
 }
+
+export default Create
