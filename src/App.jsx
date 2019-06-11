@@ -1,45 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React, { Component } from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add'
+import Container from '@material-ui/core/Container'
+import List from './components/List'
 
-function Index() {
-  return <h2>Home</h2>;
+class App extends Component {
+  state = {
+    flights: {
+      cheap: [],
+      business: []
+    }
+  }
+
+  componentDidMount() {
+    fetch('https://tokigames-challenge.herokuapp.com/api/flights/cheap')
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          flights: {
+            ...this.state.flights,
+            cheap: json.data
+          }
+        })
+      })
+
+    fetch('https://tokigames-challenge.herokuapp.com/api/flights/business')
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          flights: {
+            ...this.state.flights,
+            business: json.data
+          }
+        })
+      })
+  }
+
+  render() {
+    return (
+      <Router>
+        <Container component="main" maxWidth="md">
+          <Fab color="primary" aria-label="Add">
+            <AddIcon />
+          </Fab>
+
+          <List />
+
+          <p>{this.state.cheapJson}</p>
+          <p>{this.state.businessJson}</p>
+        </Container>
+      </Router>
+    )
+  }
 }
 
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
-
-function App() {
-  return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about/">About</Link>
-            </li>
-            <li>
-              <Link to="/users/">Users</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Route path="/" exact component={Index} />
-        <Route path="/about/" component={About} />
-        <Route path="/users/" component={Users} />
-      </div>
-    </Router>
-  );
-}
-
-
-export default App;
+export default App
