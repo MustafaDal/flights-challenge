@@ -4,26 +4,23 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/styles'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import reducer from './store/reducer'
-import mySaga from './store/sagas'
 import App from './App'
 import theme from './theme'
 import * as serviceWorker from './serviceWorker'
+import store from './store'
+import { Provider } from 'react-redux'
 
-const sagaMiddleware = createSagaMiddleware()
-
-const store = createStore(reducer, applyMiddleWare(sagaMiddleware))
-
-sagaMiddleware(mySaga)
+// console.log(store)
+// const action = type => store.dispatch({ type })
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
     <CssBaseline />
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </MuiPickersUtilsProvider>
   </ThemeProvider>,
   document.querySelector('#root')
