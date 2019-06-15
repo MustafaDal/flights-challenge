@@ -47,11 +47,17 @@ const Create = ({ history }) => {
 
   return (
     <div>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="h6" color="inherit">
             Create A New Flight
           </Typography>
+
+          <Box ml={'auto'}>
+            <Button color="inherit" variant="outlined" onClick={redirectToList}>
+              Back
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -120,18 +126,6 @@ const Create = ({ history }) => {
               <MenuItem value="business">business</MenuItem>
             </Select>
           </FormControl>
-        </Box>
-
-        <Box mt={3} mb={3}>
-          <Button
-            type="button"
-            fullWidth
-            variant="outlined"
-            color="primary"
-            onClick={redirectToList}
-          >
-            Back
-          </Button>
         </Box>
 
         <Box mt={3} mb={3}>

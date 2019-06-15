@@ -3,6 +3,7 @@ import uniqueId from 'lodash/uniqueId'
 import shuffle from 'lodash/shuffle'
 import { connect } from 'react-redux'
 import AppBar from '@material-ui/core/AppBar'
+import Box from '@material-ui/core/Box'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -43,18 +44,22 @@ class List extends Component {
               Flight List
             </Typography>
 
-            <Button
-              color="inherit"
-              variant="outlined"
-              onClick={this.handleCreateFlightClick}
-            >
-              CREATE A NEW FLIGHT
-            </Button>
+            <Box ml={'auto'}>
+              <Button
+                color="inherit"
+                variant="outlined"
+                onClick={this.handleCreateFlightClick}
+              >
+                CREATE A NEW FLIGHT
+              </Button>
+            </Box>
           </Toolbar>
         </AppBar>
 
         {showLoading ? (
-          <CircularProgress />
+          <Box mt={5} textAlign="center">
+            <CircularProgress />
+          </Box>
         ) : (
           shuffledFlights.map(flight => (
             <Item {...flight} key={getUniqueKey()} />
