@@ -1,45 +1,55 @@
 const initialState = {
-  cheap: {
-    list: [],
-    loading: false,
-    error: null
-  },
-  business: {
-    list: [],
-    loading: false,
-    error: null
-  }
+  list: [],
+  loading: false,
+  error: null
 }
 
-export default function counter(state = initialState, action) {
-  switch (action.type) {
+export function cheapFlights(state = initialState, { type, payload }) {
+  switch (type) {
     case 'REQUESTED_CHEAP_FLIGHTS':
       return {
         ...state,
-        cheap: {
-          ...state.cheap,
-          loading: true,
-          error: null
-        }
+        loading: true,
+        error: null
       };
     case 'REQUESTED_CHEAP_FLIGHTS_SUCCEEDED':
-      console.log('REQUESTED_CHEAP_FLIGHTS_SUCCEEDED', action)
       return {
         ...state,
-        cheap: {
-          list: action.payload,
-          loading: false,
-          error: null
-        }
+        list: payload,
+        loading: false,
+        error: null
       };
     case 'REQUESTED_CHEAP_FLIGHTS_FAILED':
       return {
         ...state,
-        cheap: {
-          ...state.cheap,
-          loading: false,
-          error: action.payload
-        }
+        loading: false,
+        error: payload
+      };
+    default:
+      return state
+  }
+}
+
+export function businessFlights(state = initialState, { type, payload }) {
+  switch (type) {
+    case 'REQUESTED_BUSINESS_FLIGHTS':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case 'REQUESTED_BUSINESS_FLIGHTS_SUCCEEDED':
+      return {
+        ...state,
+        list: payload,
+        loading: false,
+        error: null
+      };
+    case 'REQUESTED_BUSINESS_FLIGHTS_FAILED':
+      return {
+        ...state,
+        loading: false,
+        error: payload
       };
     default:
       return state

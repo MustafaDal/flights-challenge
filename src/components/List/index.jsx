@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { uniqueId, shuffle } from 'lodash-es'
-import { makeStyles } from '@material-ui/core/styles'
+import uniqueId from 'lodash/uniqueId'
+import shuffle from 'lodash/shuffle'
 import { connect } from 'react-redux'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -8,7 +8,10 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Item from './Item'
-import { requestFlights } from '../../store/sagas'
+import {
+  requestCheapFlights,
+  requestBusinessFlights
+} from '../../store/actions'
 
 const getUniqueKey = () => uniqueId('flight_')
 
@@ -19,22 +22,19 @@ class List extends Component {
   }
 
   handleCreateFlightClick = () => {
-    this.props.history.push('create')
+    const { history } = this.props
+    history.push('create')
   }
 
   componentDidMount() {
-    this.props.requestFlights()
-    // const API_BASE_URL = 'https://tokigames-challenge.herokuapp.com/api'
-    // Promise.all([
-    //   fetch(`${API_BASE_URL}/flights/cheap`).then(res => res.json()),
-    //   fetch(`${API_BASE_URL}/flights/business`).then(res => res.json())
-    // ]).then(responses => {
-    //   const [{ data: cheap }, { data: business }] = responses
-    //   console.log(cheap, business)
-    // })
+    const { requestFlights } = this.props
+    requestFlights()
   }
 
   render() {
+    const { cheapFlights, businessFlights, shuffledFlights } = this.props
+    const showLoading = cheapFlights.loading || businessFlights.loading
+
     return (
       <div>
         <AppBar position="static" color="primary">
@@ -53,32 +53,34 @@ class List extends Component {
           </Toolbar>
         </AppBar>
 
-        {(this.props.cheapflight.loading ||
-          this.props.bussinessFlight.loading) && <CircularProgress />}
-
-        {this.props.shuffledFlights.map(flight => (
-          <Item {...flight} key={getUniqueKey()} />
-        ))}
+        {showLoading ? (
+          <CircularProgress />
+        ) : (
+          shuffledFlights.map(flight => (
+            <Item {...flight} key={getUniqueKey()} />
+          ))
+        )}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  const {
-    flights: { cheap, business }
-  } = state
-  console.log(state)
+  const { cheapFlights, businessFlights } = state
+
   return {
-    cheapflight: cheap,
-    bussinessFlight: business,
-    shuffledFlights: shuffle([...cheap.list, ...business.list])
+    cheapFlights,
+    businessFlights,
+    shuffledFlights: shuffle([...cheapFlights.list, ...businessFlights.list])
   }
 }
 
 const mapActionsToProps = dispatch => {
   return {
-    requestFlights: () => dispatch(requestFlights())
+    requestFlights: () => {
+      dispatch(requestCheapFlights())
+      dispatch(requestBusinessFlights())
+    }
   }
 }
 
