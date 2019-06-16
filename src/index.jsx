@@ -10,9 +10,6 @@ import * as serviceWorker from './serviceWorker'
 import store from './store'
 import { Provider } from 'react-redux'
 
-// console.log(store)
-// const action = type => store.dispatch({ type })
-
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}

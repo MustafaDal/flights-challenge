@@ -158,7 +158,6 @@ const Create = ({ history, addFlight }) => {
 const mapActionsToProps = dispatch => {
   return {
     addFlight: ({ type, data }) => {
-      console.log(type, data)
       return type === 'cheap'
         ? dispatch(addCheapFlight(data))
         : dispatch(addBusinessFlight(data))
