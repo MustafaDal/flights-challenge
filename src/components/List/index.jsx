@@ -26,6 +26,10 @@ class List extends Component {
       title: 'Departure',
       field: 'departureFormatted',
       customSort: (a, b) => compareAsc(a.departure, b.departure)
+    },
+    {
+      title: 'Type',
+      field: 'type'
     }
   ]
 
@@ -99,11 +103,15 @@ class List extends Component {
 
 const mapStateToProps = state => {
   const { cheapFlights, businessFlights } = state
+  const addFlightType = type => item => ({ ...item, type })
 
   return {
     cheapFlights,
     businessFlights,
-    shuffledFlights: shuffle([...cheapFlights.list, ...businessFlights.list])
+    shuffledFlights: shuffle([
+      ...cheapFlights.list.map(addFlightType('cheap')),
+      ...businessFlights.list.map(addFlightType('business'))
+    ])
   }
 }
 
