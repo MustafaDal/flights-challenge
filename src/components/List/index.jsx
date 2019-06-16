@@ -15,11 +15,6 @@ import {
 } from '../../store/actions'
 
 class List extends Component {
-  state = {
-    cheap: [],
-    business: []
-  }
-
   tableColumns = [
     { title: 'Route', field: 'route' },
     {
