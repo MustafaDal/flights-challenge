@@ -12,36 +12,48 @@ import FilledInput from '@material-ui/core/FilledInput'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
+import { connect } from 'react-redux'
+import { addCheapFlight, addBusinessFlight } from '../store/actions'
 
-/*
-business
-  arrival: "Antalya"
-  arrivalTime: 1564410656
-  departure: "Ankara"
-  departureTime: 1561627856
-
-cheap:
-  arrival: 1558902656
-  departure: 1558902656
-  route: "Cruz del Eje-Antalya"
-*/
-
-const Create = ({ history }) => {
-  const [departureTime, handleChangeDepartureTime] = useState(new Date())
-  const [arrivalTime, handleChangeArrivalTime] = useState(new Date())
-
-  const [values, setValues] = React.useState({
-    flightType: ''
+const Create = ({ history, addFlight }) => {
+  const [values, setValues] = useState({
+    departure: '',
+    arrival: '',
+    flightType: '',
+    arrivalTime: new Date(),
+    departureTime: new Date()
   })
 
   const handleChange = event => {
+    if (event && event.target) {
+      setValues(oldValues => ({
+        ...oldValues,
+        [event.target.name]: event.target.value
+      }))
+    }
+  }
+
+  const handleTimeChange = name => value => {
     setValues(oldValues => ({
       ...oldValues,
-      [event.target.name]: event.target.value
+      [name]: value
     }))
   }
 
   const redirectToList = () => {
+    history.push('/')
+  }
+
+  const handleOnSubmit = e => {
+    e.preventDefault()
+    addFlight({
+      type: values.flightType,
+      data: {
+        route: `${values.departure}-${values.arrival}`,
+        arrival: new Date(values.arrivalTime).getTime(),
+        departure: new Date(values.departureTime).getTime()
+      }
+    })
     history.push('/')
   }
 
@@ -61,7 +73,7 @@ const Create = ({ history }) => {
         </Toolbar>
       </AppBar>
 
-      <form>
+      <form onSubmit={handleOnSubmit}>
         <TextField
           variant="filled"
           margin="normal"
@@ -72,6 +84,8 @@ const Create = ({ history }) => {
           name="departure"
           autoComplete="departure"
           autoFocus
+          value={values.departure}
+          onChange={handleChange}
         />
 
         <TextField
@@ -83,14 +97,16 @@ const Create = ({ history }) => {
           label="arrival"
           name="arrival"
           autoComplete="arrival"
+          value={values.arrival}
+          onChange={handleChange}
         />
 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Box mt={2} mb={3}>
             <DateTimePicker
-              label="departureTime"
-              value={departureTime}
-              onChange={handleChangeDepartureTime}
+              label="Departure Time"
+              value={values.departureTime}
+              onChange={handleTimeChange('departureTime')}
               inputVariant="filled"
               required
               fullWidth
@@ -101,9 +117,9 @@ const Create = ({ history }) => {
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Box mt={3} mb={3}>
             <DateTimePicker
-              label="arrivalTime"
-              value={arrivalTime}
-              onChange={handleChangeArrivalTime}
+              label="Arrival Time"
+              value={values.arrivalTime}
+              onChange={handleTimeChange('arrivalTime')}
               inputVariant="filled"
               required
               fullWidth
@@ -117,13 +133,14 @@ const Create = ({ history }) => {
             <Select
               value={values.flightType}
               onChange={handleChange}
-              input={<FilledInput name="flightType" id="flightType" />}
+              input={<FilledInput name="flightType" id="flightType" required />}
+              required
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="cheap">cheap</MenuItem>
-              <MenuItem value="business">business</MenuItem>
+              <MenuItem value="cheap">Cheap</MenuItem>
+              <MenuItem value="business">Business</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -138,4 +155,18 @@ const Create = ({ history }) => {
   )
 }
 
-export default Create
+const mapActionsToProps = dispatch => {
+  return {
+    addFlight: ({ type, data }) => {
+      console.log(type, data)
+      return type === 'cheap'
+        ? dispatch(addCheapFlight(data))
+        : dispatch(addBusinessFlight(data))
+    }
+  }
+}
+
+export default connect(
+  null,
+  mapActionsToProps
+)(Create)

@@ -25,6 +25,14 @@ export function cheapFlights(state = initialState, { type, payload }) {
         loading: false,
         error: payload
       };
+    case 'ADD_A_CHEAP_FLIGHT':
+      return {
+        ...state,
+        list: [
+          payload,
+          ...state.list
+        ]
+      };
     default:
       return state
   }
@@ -50,6 +58,14 @@ export function businessFlights(state = initialState, { type, payload }) {
         ...state,
         loading: false,
         error: payload
+      };
+    case 'ADD_A_BUSINESS_FLIGHT':
+      return {
+        ...state,
+        list: [
+          payload,
+          ...state.list
+        ]
       };
     default:
       return state
